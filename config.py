@@ -40,7 +40,7 @@ class GeminiEmbeddingProvider(EmbeddingProvider):
 
 
 class Config:
-    def __init__(self, config_path: str = "config.yml"):
+    def __init__(self, config_path: str = "config.yaml"):
         load_dotenv()
 
         with open(config_path, 'r') as f:
