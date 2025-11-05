@@ -1,0 +1,12 @@
+llm:
+  model_name: "gemini-pro"
+  temperature: 0.7
+
+embedding:
+  model_name: "models/embedding-001"
+
+rag:
+  chunk_size: 500
+  chunk_overlap: 100
+  db_path: "./chroma_db"
+  collection_name: "codebase"
