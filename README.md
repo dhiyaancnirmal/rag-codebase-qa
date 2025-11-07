@@ -9,7 +9,7 @@ A RAG-based Q&A system for C++ codebases using Google Gemini.
    pip install -r requirements.txt
    ```
 
-2. Copy `.env.example` to `.env` and add your Google API key:
+2. Copy `.env.example` to `.env` and add your Google API key.
    ```bash
    cp .env.example .env
    ```
