@@ -113,4 +113,4 @@ class RAGEngine:
             return result["result"]
 
         except Exception as e:
-            return f"Error during query: {e}"
+            return f"Query error: {e}"
