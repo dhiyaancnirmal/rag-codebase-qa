@@ -3,10 +3,12 @@ from pathlib import Path
 from typing import Dict, List
 
 import chromadb
-from langchain.text_splitter import Language, RecursiveCharacterTextSplitter
+from langchain_text_splitters import Language, RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain.chains import RetrievalQA
-from langchain.schema import Document
+from langchain_core.documents import Document
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 
 from config import LLMProvider, EmbeddingProvider
 
@@ -102,15 +104,29 @@ class RAGEngine:
                 return "Error: No codebase ingested yet. Run ingest first."
 
             llm = self.llm_provider.get_llm()
+            retriever = self.vectorstore.as_retriever(search_kwargs={"k": k})
 
-            qa_chain = RetrievalQA.from_chain_type(
-                llm=llm,
-                chain_type="stuff",
-                retriever=self.vectorstore.as_retriever(search_kwargs={"k": k})
+            template = """Answer the question based only on the following context:
+{context}
+
+Question: {question}
+
+Answer:"""
+
+            prompt = ChatPromptTemplate.from_template(template)
+
+            def format_docs(docs):
+                return "\n\n".join([d.page_content for d in docs])
+
+            chain = (
+                {"context": retriever | format_docs, "question": RunnablePassthrough()}
+                | prompt
+                | llm
+                | StrOutputParser()
             )
 
-            result = qa_chain.invoke({"query": question})
-            return result["result"]
+            result = chain.invoke(question)
+            return result
 
         except Exception as e:
             return f"Error during query: {e}"

@@ -1,20 +1,17 @@
 # RAG-Codebase-QA
 
-A RAG-based Q&A system for C++ codebases using Google Gemini.
+Q&A system for C++ codebases using retrieval-augmented generation.
 
 ## Setup
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Install dependencies and configure your API key:
 
-2. Copy `.env.example` to `.env` and add your Google API key.
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+```
 
-3. Edit `.env` and add your API key.
+Edit `.env` and add your Google API key.
 
 ## Usage
 
@@ -25,13 +22,9 @@ python main.py ingest /path/to/cpp/repo
 
 Query the codebase:
 ```bash
-python main.py query "How does the memory allocation work?"
+python main.py query "your question here"
 ```
 
 ## Configuration
 
-Edit `config.yaml` to adjust:
-- LLM model and temperature
-- Embedding model
-- Chunk size and overlap
-- Database path
+The `config.yaml` file controls chunk size, model selection, and database settings. The architecture uses abstract provider interfaces, making it easy to swap LLM or embedding providers.
